@@ -3,8 +3,4 @@
 // convenience to get you started writing code faster.
 //
 
-export const twoFer = name => {
-  const displayName = name ? name : 'you';
-  
-  return `One for ${displayName}, one for me.`;
-};
+export const twoFer = (name = 'you') => `One for ${name}, one for me.`;
