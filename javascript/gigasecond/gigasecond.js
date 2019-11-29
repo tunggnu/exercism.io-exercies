@@ -1,5 +1,5 @@
-export const gigasecond = (date) => {
-  return new Date(date.valueOf() + gigasecondInMilisecond);
+export const gigasecond = date => {
+  return new Date(date.getTime() + gigasecondInMilisecond);
 };
 
-const gigasecondInMilisecond = 10 ** 9 * 1000;
+const gigasecondInMilisecond = 1e12;
