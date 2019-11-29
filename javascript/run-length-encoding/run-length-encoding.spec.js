@@ -1,4 +1,4 @@
-import { encode, decode } from "./run-length-encoding";
+import { encode, decode } from "./run-length-encoding.v2";
 
 describe("run-length encode a string", () => {
   test("encode empty string", () => {
