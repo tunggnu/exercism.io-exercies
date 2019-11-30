@@ -1,4 +1,4 @@
-import { isPangram } from './pangram';
+import { isPangram } from './pangram.v2';
 
 describe('Pangram()', () => {
   test('empty sentence', () => {
