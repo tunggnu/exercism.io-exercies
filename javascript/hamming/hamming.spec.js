@@ -1,4 +1,4 @@
-import { compute } from './hamming';
+import { compute } from './hamming.v2';
 
 describe('Hamming', () => {
   test('empty strands', () => {
