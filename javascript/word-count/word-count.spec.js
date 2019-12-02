@@ -1,4 +1,4 @@
-import { Words } from './word-count';
+import { Words } from './word-count.v2';
 
 describe('words()', () => {
   const words = new Words();
