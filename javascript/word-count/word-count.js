@@ -2,8 +2,8 @@ export class Words {
   count(statement = '') {
     const wordCount = {};
     const words = statement
-      .toLowerCase()
       .trim()
+      .toLowerCase()
       .split(/\s+/);
 
     words.forEach((word) => {
