@@ -1,4 +1,4 @@
-import { transform } from './etl';
+import { transform } from './etl.v2';
 
 describe('Transform', () => {
   test('transforms one value', () => {
