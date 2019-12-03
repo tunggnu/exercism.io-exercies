@@ -1,4 +1,4 @@
-import { classify } from './perfect-numbers';
+import { classify } from './perfect-numbers.v2';
 
 describe('Exercise - Perfect Numbers', () => {
   describe('Invalid Inputs', () => {
