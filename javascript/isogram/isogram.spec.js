@@ -1,4 +1,4 @@
-import { isIsogram } from './isogram';
+import { isIsogram } from './isogram.v2';
 
 describe('Isogram Test Suite', () => {
   test('empty string', () => {
