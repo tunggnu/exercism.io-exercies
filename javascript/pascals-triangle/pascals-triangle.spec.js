@@ -1,4 +1,4 @@
-import { Triangle } from './pascals-triangle';
+import { Triangle } from './pascals-triangle.v2';
 
 describe('Triangle', () => {
   test('with one row', () => {
