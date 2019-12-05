@@ -1,23 +1,28 @@
 export class LinkedList {
   constructor() {
-    this._headNode = this._tailNode = null;
+    // The maker node at the head of the list.
+    this._headMaker = new Node(null);
+
+    // The maker node at the tail of the list.
+    this._tailMaker = new Node(null, this._headMaker);
+
+    this._headMaker.next = this._tailMaker;
+
     this._count = 0;
   }
 
   push(x) {
-    const node = new Node(x);
+    const tailMakerNode = this._tailMaker;
+    const currentTailNode = tailMakerNode.prev;
 
-    if (this._count === 0) {
-      // Initilize the list.
-      this._headNode = this._tailNode = node;
-    } else {
-      // Attach the new node to the tail of the list.
-      this._tailNode.next = node;
-      node.prev = this._tailNode;
+    // Create the new tail node and connect it with the current and the maker.
+    const newTailNode = new Node(x, currentTailNode, tailMakerNode);
 
-      // Move the tail pointer forward.
-      this._tailNode = node;
-    }
+    // Connect the current tail node with the new tail node.
+    currentTailNode.next = newTailNode;
+
+    // Connect the tail maker with the new tail node.
+    tailMakerNode.prev = newTailNode;
 
     this._count += 1;
 
@@ -25,49 +30,55 @@ export class LinkedList {
   }
 
   pop() {
-    const node = this._tailNode;
+    if (this._count === 0) return null;
 
-    // Move the tail pointer backward.
-    this._tailNode = node.prev;
-    if (this._tailNode !== null) this._tailNode.next = null;
+    const tailMakerNode = this._tailMaker;
+    const currentTailNode = tailMakerNode.prev;
+    const newTailNode = currentTailNode.prev;
+
+    // Connect the new tail node with the tail maker.
+    tailMakerNode.prev = newTailNode;
+    newTailNode.next = tailMakerNode;
 
     // Delete the references.
-    node.prev = node.next = null;
+    currentTailNode.prev = currentTailNode.next = null;
 
     this._count -= 1;
 
-    return node.value;
+    return currentTailNode.value;
   }
 
   shift() {
-    const node = this._headNode;
+    if (this._count === 0) return null;
 
-    // Move the head pointer forward.
-    this._headNode = this._headNode.next;
-    if (this._headNode !== null) this._headNode.prev = null;
+    const headMakerNode = this._headMaker;
+    const currentHeadNode = headMakerNode.next;
+    const newHeadNode = currentHeadNode.next;
+
+    // Connect the new head node with the head maker.
+    headMakerNode.next = newHeadNode;
+    newHeadNode.prev = headMakerNode;
 
     // Delete the references.
-    node.prev = node.next = null;
+    currentHeadNode.prev = currentHeadNode.next = null;
 
     this._count -= 1;
 
-    return node.value;
+    return currentHeadNode.value;
   }
 
   unshift(x) {
-    const node = new Node(x);
+    const headMakerNode = this._headMaker;
+    const currentHeadNode = headMakerNode._next;
 
-    if (this._count === 0) {
-      // Initilize the list.
-      this._headNode = this._tailNode = node;
-    } else {
-      // Attach the new node to the head of the list.
-      node.next = this._headNode;
-      this._headNode.prev = node;
+    // Create the new head node and connect it with the current and the maker.
+    const newHeadNode = new Node(x, headMakerNode, currentHeadNode);
 
-      // Move the head pointer backward.
-      this._headNode = node;
-    }
+    // Connect the current head node with the new head node.
+    currentHeadNode.prev = newHeadNode;
+
+    // Connect the head maker with the new head node.
+    headMakerNode.next = newHeadNode;
 
     this._count += 1;
 
@@ -75,22 +86,19 @@ export class LinkedList {
   }
 
   delete(x) {
-    for (let node = this._headNode; node !== null; node = node.next) {
+    const headMakerNode = this._headMaker;
+    const tailMakerNode = this._tailMaker;
+
+    for (
+      let node = headMakerNode.next;
+      node !== tailMakerNode;
+      node = node.next
+    ) {
       if (node.value !== x) continue;
 
-      if (node === this._headNode) {
-        // Move the head pointer forward.
-        this._headNode = node.next;
-        if (this._headNode !== null) this._headNode.prev = null;
-      } else if (node === this._tailNode) {
-        // Move the tail pointer backward.
-        this._tailNode = node.prev;
-        if (this._tailNode !== null) this._tailNode.next = null;
-      } else {
-        // Connect the two adjacent nodes.
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
-      }
+      // Connect the two adjacent nodes.
+      node.prev.next = node.next;
+      node.next.prev = node.prev;
 
       // Delete the references.
       node.prev = node.next = null;
@@ -107,10 +115,10 @@ export class LinkedList {
 }
 
 class Node {
-  constructor(x) {
+  constructor(x, prev = null, next = null) {
     this._value = x;
-    this._next = null;
-    this._prev = null;
+    this._next = next;
+    this._prev = prev;
   }
 
   get value() {
