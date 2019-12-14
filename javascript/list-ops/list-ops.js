@@ -1,16 +1,21 @@
+const reduce = (arr, res, fn, i = 0, step = 1) =>
+  i < arr.length && i >= 0
+    ? reduce(arr, fn(res, arr[i]), fn, i + step, step)
+    : res;
+
 export class List {
   constructor(values = []) {
-    // Store an copy of the input
+    // Store a copy of the input
     this._values = values.concat();
   }
 
   get values() {
-    // Return an copy of values
+    // Return a copy of values
     return this._values.slice();
   }
 
   set values(values) {
-    // Store an copy of the input
+    // Store a copy of the input
     this._values = values.concat();
   }
 
@@ -33,23 +38,19 @@ export class List {
   }
 
   filter(fn) {
-    const filteredValues = [];
-
-    this.values.forEach((value) => {
-      if (fn(value)) filteredValues.push(value);
-    });
-
-    return new List(filteredValues);
+    return new List(
+      reduce(this._values, [], (result, element) =>
+        fn(element) ? result.concat(element) : result
+      )
+    );
   }
 
   map(fn) {
-    const mappedValues = [];
-
-    this.values.forEach((value, index, array) =>
-      mappedValues.push(fn(value, index, array))
+    return new List(
+      reduce(this._values, [], (result, element) =>
+        result.concat([fn(element)])
+      )
     );
-
-    return new List(mappedValues);
   }
 
   length() {
@@ -57,27 +58,14 @@ export class List {
   }
 
   foldl(fn, acc) {
-    if (this.length() === 0) return acc;
-
-    for (let value of this._values) acc = fn(acc, value);
-
-    return acc;
+    return reduce(this._values, acc, fn);
   }
 
   foldr(fn, acc) {
-    if (this.length() === 0) return acc;
-
-    for (let i = this.length() - 1; i >= 0; i--) acc = fn(acc, this._values[i]);
-
-    return acc;
+    return reduce(this._values, acc, fn, this._values.length - 1, -1);
   }
 
   reverse() {
-    const reversedValues = this.foldr((acc, value) => {
-      acc.push(value);
-      return acc;
-    }, []);
-
-    return new List(reversedValues);
+    return new List(this.foldr((acc, value) => acc.concat([value]), []));
   }
 }

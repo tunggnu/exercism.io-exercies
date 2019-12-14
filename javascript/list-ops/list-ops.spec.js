@@ -44,7 +44,6 @@ describe('concat lists and lists of lists into new list', () => {
     const list4 = new List([4, 5, 6]);
     const listOfLists = new List([list2, 2, list3, 3, list4, 4])
     expect(list1.concat(listOfLists).values).toEqual([1, 2, 3, 2, 3, 4, 5, 6, 4]);
-    console.log(list1.values, list2.values, list3.values, list4.values);
   });
 });
 
