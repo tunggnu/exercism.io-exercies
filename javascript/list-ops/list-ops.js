@@ -19,14 +19,16 @@ export class List {
     this._values = values.concat();
   }
 
-  append(list) {
-    this._values = this._values.concat(list.values);
+  static of(values) {
+    return new List(values);
+  }
 
-    return this;
+  append(list) {
+    return List.of(this._values.concat(list.values));
   }
 
   flatMap() {
-    return new List(
+    return List.of(
       this.foldl(
         (res, value) =>
           res.concat(value instanceof List ? value.flatMap().values : value),
@@ -40,7 +42,7 @@ export class List {
   }
 
   filter(fn) {
-    return new List(
+    return List.of(
       reduce(this._values, [], (result, element) =>
         fn(element) ? result.concat(element) : result,
       ),
@@ -48,7 +50,7 @@ export class List {
   }
 
   map(fn) {
-    return new List(
+    return List.of(
       reduce(this._values, [], (result, element) =>
         result.concat([fn(element)]),
       ),
@@ -68,6 +70,6 @@ export class List {
   }
 
   reverse() {
-    return new List(this.foldr((acc, value) => acc.concat([value]), []));
+    return List.of(this.foldr((acc, value) => acc.concat([value]), []));
   }
 }
