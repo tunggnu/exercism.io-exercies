@@ -25,31 +25,33 @@ export class List {
     return this;
   }
 
+  flatMap() {
+    return new List(
+      this.foldl(
+        (res, value) =>
+          res.concat(value instanceof List ? value.flatMap().values : value),
+        [],
+      ),
+    );
+  }
+
   concat(list) {
-    let flattenedValues = this.values;
-
-    list.values.forEach((value) => {
-      if (value instanceof List) value = value.values;
-
-      flattenedValues = flattenedValues.concat(value);
-    });
-
-    return new List(flattenedValues);
+    return this.append(list.flatMap());
   }
 
   filter(fn) {
     return new List(
       reduce(this._values, [], (result, element) =>
-        fn(element) ? result.concat(element) : result
-      )
+        fn(element) ? result.concat(element) : result,
+      ),
     );
   }
 
   map(fn) {
     return new List(
       reduce(this._values, [], (result, element) =>
-        result.concat([fn(element)])
-      )
+        result.concat([fn(element)]),
+      ),
     );
   }
 
